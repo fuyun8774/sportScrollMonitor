@@ -1,0 +1,206 @@
+(async () => {
+
+    const multiplyPeopleUrlSet = new Set();
+    //未来小学
+    multiplyPeopleUrlSet.add("https://lhqkl.ydmap.cn/booking/schedule/103087");
+    //jianshang
+
+   // multiplyPeopleUrlSet.add("https://lhqkl.ydmap.cn/booking/schedule/103909");
+
+    const currentUrl = window.location.href;
+    var needSelectMutiply = false;
+    for (let item of multiplyPeopleUrlSet) {
+        needSelectMutiply = currentUrl.indexOf(item) != -1;
+        if (needSelectMutiply) {
+            break;
+        }
+    }
+    console.log("是否需选择两人以上场地:" + needSelectMutiply);
+
+    function sleep(time) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, time);
+        });
+    }
+    async function awaitShow(awaitEle) {
+        console.log("awaitEle " + awaitEle);
+        while (typeof awaitEle === "undefined" || typeof awaitEle === null || typeof(awaitEle) == 'undefined') {
+            await sleep(30);
+        }
+    }
+     async function awaitScroll(awaitEle,height) {
+        console.log("awaitScroll " + awaitEle);
+        while (typeof awaitEle.scrollTop === "undefined" || typeof awaitEle.scrollTop === null || typeof(awaitEle.scrollTop) == 'undefined' || awaitEle.scrollTop<height) {
+        try {
+        awaitEle=document.getElementsByClassName("van-dialog__message")[0];
+               document.getElementsByClassName("van-dialog__message")[0].scrollTo(0, 20000); 
+            }
+            catch(err) {
+            }
+            finally {
+                await sleep(30);
+            }
+            
+        }
+    }
+    async function awaiteleArrSize(awaitEle) {
+        while (awaitEle.length <= 0) {
+            await sleep(30);
+        }
+        console.log("return awaiteleArrSize " + awaitEle.length);
+
+    }
+    async function awaiteleheight(awaitEle, minHeight) {
+        while (awaitEle.scrollHeight <= minHeight) {
+            await sleep(200);
+        }
+    }
+
+
+    (() => {
+        var _st = window.setTimeout;
+        window.setTimeout = function(fRef, mDelay) {
+            if (mDelay > 200) {
+
+                //console.trace();
+                return _st(fRef, 200);
+
+            }
+            return _st(fRef, mDelay);
+        }
+
+    })()
+
+    //
+    async function awaitOrderPage() {
+        console.log("awaitOrderPage ");
+        while (document.getElementsByClassName("item-content")
+            .length <= 0) {
+            //接受协议
+            document.getElementsByClassName("van-dialog__confirm")[0].dispatchEvent(new Event("click"))
+            await sleep(30);
+        }
+
+    }
+
+      async function awaitContainHtml() {
+       console.log("awaitContainHtml");
+        while (true) {
+                if(document.getElementsByTagName("html")[0].innerText.indexOf("营业时间")==-1||document.getElementsByTagName("html")[0].innerText.indexOf("羽毛球")==-1||document.getElementsByTagName("html")[0].innerText.indexOf("乒乓球")==-1){
+            await sleep(5);
+
+                }else {
+                return;
+                }
+
+        }
+    }
+
+
+
+    async function awaitClickPeople() {
+        //document.getElementsByClassName("el-checkbox__original");
+        while (true) {
+            for (var i = 0; i < document.getElementsByClassName("el-checkbox__original")
+                .length; i++) {
+                var ele = document.getElementsByClassName("el-checkbox__original")[i]
+                console.log(ele.checked);
+                if (ele.checked + "" == "true") {
+                    return;
+                }
+            }
+
+            await sleep(50);
+        }
+    }
+    async function awaitClickMultiplyPeople() {
+        if(document.getElementsByClassName("el-checkbox__original")
+                .length<2){
+    alert("特殊场地需两人以上，当前账户下人数不够");
+}
+        while (true) {
+            
+var selectPeopleNum = 0;
+
+ for (var i = 0; i < document.getElementsByClassName("el-checkbox__original")
+                .length && i < 4; i++) {
+                var ele = document.getElementsByClassName("el-checkbox__original")[i]
+                if (ele.checked + "" != "true") {
+                    document.getElementsByClassName("el-checkbox__original")[i].click();
+                    await awaitItemSelect(document.getElementsByClassName("el-checkbox__input"),i);
+                } else {
+                    selectPeopleNum++;
+                }
+            }
+            if(selectPeopleNum>1){
+        return;
+        }
+
+            await sleep(10);
+
+        }
+
+    }
+
+    async function awaitItemSelect(checkBoxItem,index) {
+       console.log(checkBoxItem[index]);
+        while (!checkBoxItem[index].classList.contains("is-checked")) {
+            await sleep(5);
+        }
+    }
+async function awaitAccept() {
+       console.log("awaitAccept");
+        while (document.getElementsByClassName("van-dialog__confirm")[0].classList.contains("read-time-disabled")) {
+            await sleep(50);
+        }
+    }
+    document.getElementsByClassName("el-button--text")[0].click();
+
+  //  await awaiteleArrSize(document.getElementsByClassName("el-message-box"));
+   // console.log(1);
+   // await awaitShow(document.getElementsByClassName("van-dialog__message"));
+  //   console.log(2);
+    await awaiteleArrSize(document.getElementsByClassName("van-dialog__message"));
+  //  await awaiteleheight(document.getElementsByClassName("el-message-box")[0], 500);
+ // console.log(document.getElementsByClassName("van-dialog__message")[0]);
+  await awaitScroll(document.getElementsByClassName("van-dialog__message")[0],100);
+      console.log("scrollTop " + document.getElementsByClassName("van-dialog__message")[0].scrollTop);
+
+     console.log(3);
+  //  document.getElementsByClassName("van-dialog__message")[0].scrollTo(100, 20000);
+     console.log(4);
+  //  document.getElementsByClassName("van-dialog__message")[0].scrollTo(100, 20000);
+    console.log("scrollTop " + document.getElementsByClassName("van-dialog__message")[0].scrollTop);
+    await awaitAccept();
+    console.log("asdf");
+
+    await awaitOrderPage();
+    console.log("start order");
+    await awaiteleArrSize(document.getElementsByClassName("el-button--text"));
+    console.log("start verify");
+    document.getElementsByClassName("el-button--text")[0].click();
+    await awaiteleArrSize(document.getElementsByClassName("el-button full-width primary-button el-button--text"));
+    await awaiteleArrSize(document.getElementsByClassName("el-checkbox__original"));
+    console.log("click people step");
+
+    if (needSelectMutiply) {
+        console.log("select mutiply people");
+        await awaitClickMultiplyPeople();
+    } else if (document.getElementsByClassName("el-checkbox__original")
+        .length > 1) {
+        console.log("select one people");
+        //选择第一个入场人员
+        var selectPeople = document.getElementsByClassName("el-checkbox__original");
+       // selectPeople[0].click();
+        selectPeople[1].click();
+    }
+
+    await awaitClickPeople();
+    console.log("start next step1");
+    document.getElementsByClassName("el-button full-width primary-button el-button--text")[0].click();
+    //await clickNextStep(1);
+    console.log("start drag");
+
+})()
