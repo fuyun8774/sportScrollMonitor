@@ -320,12 +320,19 @@ var childCount=0;
 
     }
 
+     function backLastUrl() {
+      let currentUrl=location.href;
+      if('https://lhqkl.ydmap.cn/_/sn/busy.html'==currentUrl){
+      window.history.back();
+  return;
+      }
+    }
 
 
    // while (true) {
         try {
         document.title = ""+(osName);
-
+backLastUrl();
             await reload();
 
         } catch (err) {

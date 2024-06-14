@@ -91,9 +91,8 @@ var osName=getOS();
                                 }
                                 let currentHasBook=false;
                                 
-                                if(cell.classList.contains("col-completed")){
-                                        currentHasBook=true;
-                                        rowIndex+=1;
+                                if(cell.classList.contains("col-completed")||cell.classList.contains("col-inprocess")){
+                                        continue;
                                 }
                                 
                                 if(cell.innerText.indexOf("开放预订")!=-1){
@@ -218,9 +217,17 @@ var osName=getOS();
                         
                 }
     }
-
+  function backLastUrl() {
+      let currentUrl=location.href;
+      if('https://lhqkl.ydmap.cn/_/sn/busy.html'==currentUrl){
+      window.history.back();
+      return;
+      }
+    }
      while (true) {
         try {
+        backLastUrl();
+
                                await monitorFunc();
                                        document.title = ""+(osName);
 
