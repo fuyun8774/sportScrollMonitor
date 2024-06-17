@@ -8,8 +8,8 @@
     // var monitorDay="星期三";//星期一星期二星期三星期四星期五星期六星期日
     var monitorDays = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"];
    
-     console.log(localStorage.getItem("cacheDateMapLocalStorage"));
-    var sleepTime = 20; //秒
+     console.log(localStorage.getItem("cacheMapLocalStorage"));
+    var sleepTime = 40; //秒
     function sleep(time) {
         return new Promise((resolve) => {
             setTimeout(() => {
@@ -18,14 +18,14 @@
         });
     }
      function isNull(awaitEle) {
-        return (typeof awaitEle === "undefined" || typeof awaitEle === null || typeof(awaitEle) == 'undefined' || awaitEle == 'null')
+        return (typeof awaitEle === "undefined" || typeof awaitEle === null || typeof(awaitEle) == 'undefined' || awaitEle == 'null' || JSON.stringify(awaitEle) === '{}' || JSON.stringify(awaitEle) === 'null')
     }
-     var cacheDateMap =localStorage.getItem("cacheDateMapLocalStorage") ;
+     var cacheDateMap =localStorage.getItem("cacheMapLocalStorage") ;
                  console.log(cacheDateMap);
 
     if(isNull(cacheDateMap)){
         cacheDateMap=new Map();
-            localStorage.setItem("cacheDateMapLocalStorage",new Map());
+            localStorage.setItem("cacheMapLocalStorage",JSON.stringify(new Map()));
         console.log("cacheDateMap null");
     }
             console.log(cacheDateMap);
@@ -54,13 +54,13 @@ var osName=getOS();
             //document.body.innerHTML = '';
 
 var childCount=0;
-			 var parentNode = document.body;
-			  if (parentNode) {
-			    for (let child; (child = parentNode.firstChild);) {
-			      parentNode.removeChild(child);
-			      childCount++;
-			    }
-			  }
+             var parentNode = document.body;
+              if (parentNode) {
+                for (let child; (child = parentNode.firstChild);) {
+                  parentNode.removeChild(child);
+                  childCount++;
+                }
+              }
 
             var newframeset = document.createElement("frameset");
             newframeset.id = 'frameset_by_';
@@ -95,7 +95,7 @@ var childCount=0;
     async function reload() {
 
 
-    	console.log(document);
+        console.log(document);
 
         try {
             await awaiteleArrSizeAndMaxWait(document.getElementsByClassName("slider-item text-center rounded-[4px]"), 15);
@@ -244,8 +244,8 @@ var childCount=0;
                     console.log("containAllSport " + sportNumberAndNo);
 
                     if(osName=="Windows 7"){
-                    	window.open("https://localhost.notify/sportNotify?sportNumberNo=" + sportNumberAndNo+"&whatDay="+whatDay+ "&containType=all&timestamp=" + (new Date()));
-                    	window.open("http://localhost:8645/sportNotify?sportNumberNo=" + sportNumberAndNo+"&whatDay="+whatDay+ "&containType=all&timestamp="+(new Date()));
+                        window.open("https://localhost.notify/sportNotify?sportNumberNo=" + sportNumberAndNo+"&whatDay="+whatDay+ "&containType=all&timestamp=" + (new Date()));
+                        window.open("http://localhost:8645/sportNotify?sportNumberNo=" + sportNumberAndNo+"&whatDay="+whatDay+ "&containType=all&timestamp="+(new Date()));
                     }
                     else {
                     window.open("https://localhost.notify/sportNotify?sportNumberNo=" + sportNumberAndNo+"&whatDay="+whatDay+ "&containType=all&timestamp=" + (new Date()));
@@ -290,19 +290,19 @@ var childCount=0;
                     cacheDateMap.set("currentNotifyOr", new Date() - 1);
                     console.log("containAllSport " + sportNumberOrNo);
                    if(osName=="Windows 7"){
-                    	window.open("https://localhost.notify/sportNotify?sportNumberNo=" + sportNumberOrNo+"&whatDay="+whatDay+ "&containType=or&timestamp=" + (new Date()));
-                    	window.open("http://localhost:8645/sportNotify?sportNumberNo=" + sportNumberOrNo+"&whatDay="+whatDay+ "&containType=or&timestamp="+(new Date()));
+                        window.open("https://localhost.notify/sportNotify?sportNumberNo=" + sportNumberOrNo+"&whatDay="+whatDay+ "&containType=or&timestamp=" + (new Date()));
+                        window.open("http://localhost:8645/sportNotify?sportNumberNo=" + sportNumberOrNo+"&whatDay="+whatDay+ "&containType=or&timestamp="+(new Date()));
                     }
                     else {
                         window.open("https://localhost.notify/sportNotify?sportNumberNo=" + sportNumberOrNo+"&whatDay="+whatDay+ "&containType=or&timestamp=" + (new Date()));
-                    	window.open("http://localhost:8645/sportNotify?sportNumberNo=" + sportNumberOrNo+"&whatDay="+whatDay+ "&containType=or&timestamp="+(new Date()));
+                        window.open("http://localhost:8645/sportNotify?sportNumberNo=" + sportNumberOrNo+"&whatDay="+whatDay+ "&containType=or&timestamp="+(new Date()));
                     }
                 } else {
                     console.log("send ok2");
                 }
 
             }
-            localStorage.setItem("cacheDateMapLocalStorage",cacheDateMap);
+            localStorage.setItem("cacheMapLocalStorage", JSON.stringify(cacheDateMap));
 
      
 
