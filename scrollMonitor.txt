@@ -9,7 +9,7 @@
     var monitorDays = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"];
    
      console.log(localStorage.getItem("cacheMapLocalStorage"));
-    var sleepTime = 40; //秒
+    var sleepTime = 20; //秒
     function sleep(time) {
         return new Promise((resolve) => {
             setTimeout(() => {
